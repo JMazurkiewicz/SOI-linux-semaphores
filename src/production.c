@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "def.h"
 #include "utility.h"
 
 int producer_a(void) {
-    milli_sleep(500); // simulate production
+    milli_sleep(PRODUCTION_A_TIME);
     return 3 * (rand() % 1000);
 }
 
@@ -18,7 +19,7 @@ int producer_b(void) {
         ++val;
     }
 
-    milli_sleep(300); // simulate production
+    milli_sleep(PRODUCTION_B_TIME);
     return val;
 }
 

@@ -7,6 +7,7 @@
 #define PROC_C 2
 #define PROC_D 3
 
+#define QUEUE_MAX_SIZE 4
 #define QUEUE_COUNT 2
 #define C_QUEUE 0
 #define D_QUEUE 1
@@ -16,6 +17,10 @@
 # error "MAX_SENT_DATA" must have even value
 #endif
 
-#define QUEUE_MAX_SIZE 4
+#define PRODUCTION_A_TIME 500
+#define PRODUCTION_B_TIME 300
+
+#define PRODUCER_SLEEP_TIME 100
+#define CONSUMER_SLEEP_TIME 800
 
 #endif

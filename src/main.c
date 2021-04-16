@@ -26,7 +26,7 @@ void producer_routine(struct proc_data* data, producer_t producer, const char* n
         proc_post(data, QSEM_MUTEX, receiver_queue);
         proc_post(data, QSEM_FULL_SEM, receiver_queue);
 
-        milli_sleep(100);
+        milli_sleep(PRODUCER_SLEEP_TIME);
     }
 
     proc_log(data, "Producent \"%s\" zakończył pracę [pid = %d]\n", name, getpid());
@@ -46,7 +46,7 @@ void consumer_routine(struct proc_data* data, int queue_id, const char* name) {
         proc_post(data, QSEM_MUTEX, queue_id);
         proc_post(data, QSEM_EMPTY_SEM, queue_id);
 
-        milli_sleep(800);
+        milli_sleep(CONSUMER_SLEEP_TIME);
     }
 
     proc_log(data, "Konsument \"%s\" zakończył pracę [pid = %d]\n", name, getpid());

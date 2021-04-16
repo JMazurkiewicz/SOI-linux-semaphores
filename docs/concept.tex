@@ -1,0 +1,79 @@
+\documentclass[8pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{isodate}
+\usepackage[polish]{babel}
+\usepackage{enumerate}
+\usepackage{makecell}
+\usepackage{indentfirst}
+\setlength{\parskip}{0.2em}
+
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{commentColour}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.98, 0.98, 0.98}
+
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{commentColour},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=false,                 
+    numbers=left,                    
+    numbersep=0pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+
+\title{SOI - Semafory \\ \large Koncepcja}
+\author{Jakub Mazurkiewicz}
+
+\begin{document}
+
+\maketitle
+
+\section{Procesy}
+W systemie zostaną uruchomione cztery procesy - dwóch producentów i dwóch konsumentów. Zadaniem producentów będzie wytworzenie danych typu \texttt{int} i umieszczenie ich na zmianę w jednej z dwóch kolejek FIFO. Konsumenci (\texttt{process-c} i \texttt{process-d}) będą wyjmować dane z przypisanej im kolejki, po czym wyświetlą informację o tym, od którego producenta pochodzi dana oraz czas odbioru. Dostawcę liczby będziemy rozpoznawać na podstawie podzielności przez 3:
+\begin{itemize}
+    \item Producent 1 (\texttt{process-a}) będzie produkował losowe liczby podzielne przez 3
+    \item Producent 2 (\texttt{process-b}) będzie produkował dwie kolejne liczby niepodzielne przez 3 (czyli $1, 2, 4, 5, ...$)
+\end{itemize}
+
+\section{Narzędzia}
+Kolejka FIFO zostanie zrealizowana jako struktura posiadająca wskaźnik do pamięci współdzielonej (\texttt{shm}) zawierającej przesyłane dane oraz dodatkowe atrybuty.
+
+\begin{lstlisting}[style=CStyle]
+#define MAX_SIZE 20
+struct main_queue_t {
+    int* memory;
+    // ewentualne dodatkowe parametry
+};
+\end{lstlisting}
+
+\noindent Dla kolejek powstaną również semafory chroniące sekcję krytyczną i informujące o ilości dostępnych miejsc w kolejce.
+
+\noindent Podsumowanie:
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{c|c}
+      \textbf{Narzędzie} & \textbf{Wybór} \\
+      \hline
+      System & Ubuntu 20.04/18.04 \\
+      Umiejscowienie kolejki FIFO & Pamięć współdzielona (\texttt{<sys/shm.h>}) \\
+      Synchronizacja & Semafory (\texttt{<semaphore.h>}) \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\end{document}

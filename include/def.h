@@ -7,7 +7,7 @@
 #define PROC_C 2
 #define PROC_D 3
 
-#define QUEUE_MAX_SIZE 4
+#define QUEUE_MAX_SIZE 5
 #define QUEUE_COUNT 2
 #define C_QUEUE 0
 #define D_QUEUE 1
@@ -22,5 +22,7 @@
 
 #define PRODUCER_SLEEP_TIME 100
 #define CONSUMER_SLEEP_TIME 800
+
+#define OUTPUT_FILE_NAME "semaphores.log"
 
 #endif

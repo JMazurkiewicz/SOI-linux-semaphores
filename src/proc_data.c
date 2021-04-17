@@ -19,64 +19,61 @@ static const char* NAMES[] = {
 #define QUEUE_BUFFER_NAME(i) NAMES[2*i + 1]
 #define NAMES_COUNT (sizeof(NAMES) / sizeof(const char*))
 
-static void qmem_open(struct proc_data* data) {
+static void proc_mem_open(struct proc_data* data) {
     for(int i = 0; i < QUEUE_COUNT; ++i) {
         printf("Tworzenie pamięci współdzielonej [%d]\n", i);
         int result;
 
-        // open shared memory
         result = shm_open(QUEUE_BUFFER_NAME(i), O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
         if(result == -1) {
-            failure("qmem_open%shm_open%queue_buffer_descriptor");
+            failure("proc_mem_open%shm_open%queue_buffer_descriptor");
         } else {
             data->queue_buffer_descriptor[i] = result;
         }
 
         result = shm_open(QUEUE_NAME(i), O_RDWR | O_CREAT | O_TRUNC, S_IRWXU);
         if(result == -1) {
-            failure("qmem_open%shm_open%queue_descriptor");
+            failure("proc_mem_open%shm_open%queue_descriptor");
         } else {
             data->queue_descriptor[i] = result;
         }
 
-        // truncate file to requires sizes
         result = ftruncate(data->queue_buffer_descriptor[i], QUEUE_MAX_SIZE * sizeof(int));
         if(result == -1) {
-            failure("qmem_open%ftruncate%queue_buffer_descriptor");
+            failure("proc_mem_open%ftruncate%queue_buffer_descriptor");
         }
 
         result = ftruncate(data->queue_descriptor[i], sizeof(struct queue));
         if(result == -1) {
-            failure("qmem_open%ftruncate%queue_descriptor");
+            failure("proc_mem_open%ftruncate%queue_descriptor");
         }
     }
+}
 
-    // map files into memory
+static void proc_mem_map(struct proc_data* data) {
     for(int i = 0; i < QUEUE_COUNT; ++i) {
         printf("Mapowanie pamięci [%d]\n", i);
         void* result;
 
         result = (int*) mmap(NULL, QUEUE_MAX_SIZE * sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, data->queue_buffer_descriptor[i], 0);
         if(result == (void*)(-1)) {
-            failure("qmem_open%mmap%queue_buffer");
+            failure("proc_mem_open%mmap%queue_buffer");
         } else {
             data->queue_buffer[i] = result;
         }
 
         result = (struct queue*) mmap(NULL, sizeof(struct queue), PROT_READ | PROT_WRITE, MAP_SHARED, data->queue_descriptor[i], 0);
         if(result == (void*)(-1)) {
-            failure("qmem_open%mmap%queue");
+            failure("proc_mem_open%mmap%queue");
         } else {
             data->queue[i] = result;
         }
 
-        // init queue with data
-        data->queue[i]->memory = data->queue_buffer[i];
-        data->queue[i]->size = 0;
+        queue_init(data->queue[i], data->queue_buffer[i]);
     }
 }
 
-static void qmem_close(struct proc_data* data) {
+static void proc_mem_close(struct proc_data* data) {
     for(int i = QUEUE_COUNT; i-- > 0; ) {
         printf("Zamykanie pamięci współdzielonej [%d]\n", i);
 
@@ -88,15 +85,19 @@ static void qmem_close(struct proc_data* data) {
     }
 }
 
-void proc_init(struct proc_data* data) {
-    data->file = fopen("semaphores.log", "w");
+static void proc_fopen(struct proc_data* data) {
+    data->file = fopen(OUTPUT_FILE_NAME, "w");
     if(data->file == NULL) {
-        failure("proc_data_fopen");
+        failure("proc_fopen");
     }
     setbuf(data->file, NULL);
+}
 
+void proc_init(struct proc_data* data) {
+    proc_fopen(data);
     qsem_open(&data->sem);
-    qmem_open(data);
+    proc_mem_open(data);
+    proc_mem_map(data);
 }
 
 
@@ -108,7 +109,7 @@ void proc_log(struct proc_data* data, const char* fmt, ...) {
 }
 
 void proc_term(struct proc_data* data) {
-    qmem_close(data);
+    proc_mem_close(data);
     qsem_close(&data->sem);
     fclose(data->file);
 }

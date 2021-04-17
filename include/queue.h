@@ -10,9 +10,10 @@ struct queue {
     size_t size;
 };
 
-void qpush(struct queue* q, int val);
-int qpop(struct queue* q);
-size_t qsize(const struct queue* q);
+void queue_init(struct queue* q, int* mem);
+void queue_push(struct queue* q, int val);
+int queue_pop(struct queue* q);
+size_t queue_size(const struct queue* q);
 
 const char* get_queue_name(int queue_id);
 

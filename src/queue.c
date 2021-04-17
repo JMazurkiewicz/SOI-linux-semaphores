@@ -2,7 +2,12 @@
 
 #include <errno.h>
 
-void qpush(struct queue* q, int val) {
+void queue_init(struct queue* q, int* mem) {
+    q->memory = mem;
+    q->size = 0;
+}
+
+void queue_push(struct queue* q, int val) {
     if(q->size < QUEUE_MAX_SIZE) {
         int* const new_location = q->memory + q->size;
 
@@ -11,7 +16,7 @@ void qpush(struct queue* q, int val) {
     }
 }
 
-int qpop(struct queue* q) {
+int queue_pop(struct queue* q) {
     if(q->size > 0) {
         const int val = *q->memory;
 
@@ -27,7 +32,7 @@ int qpop(struct queue* q) {
     return -1;
 }
 
-size_t qsize(const struct queue* q) {
+size_t queue_size(const struct queue* q) {
     return q->size;
 }
 

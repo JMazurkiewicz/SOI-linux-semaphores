@@ -2,7 +2,7 @@
 
 Autor: Jakub Mazurkiewicz
 
-Uzyskana ocena: ?/8
+Uzyskana ocena: 8/8
 
 ## Treść zadania
 
@@ -26,9 +26,9 @@ make
 ## Ocena
 
 * Koncepcja (`docs/concept.pdf`): 2/2
-* Program: ?/6
+* Program: 6/6
 
-Łącznie: ?/8
+Łącznie: 8/8
 
 ## Dodatkowe narzędzia
 

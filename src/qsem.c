@@ -3,7 +3,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-#include "queue.h"
 #include "utility.h"
 
 static const char* NAMES[] = {

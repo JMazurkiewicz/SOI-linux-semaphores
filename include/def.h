@@ -1,5 +1,5 @@
-#ifndef PROC_H
-#define PROC_H
+#ifndef DEF_H
+#define DEF_H
 
 #define PROC_COUNT 4
 #define PROC_A 0
@@ -7,7 +7,7 @@
 #define PROC_C 2
 #define PROC_D 3
 
-#define QUEUE_MAX_SIZE 5
+#define QUEUE_MAX_SIZE 1
 #define QUEUE_COUNT 2
 #define C_QUEUE 0
 #define D_QUEUE 1

@@ -7,12 +7,12 @@
 #define PROC_C 2
 #define PROC_D 3
 
-#define QUEUE_MAX_SIZE 1
+#define QUEUE_MAX_SIZE 5
 #define QUEUE_COUNT 2
 #define C_QUEUE 0
 #define D_QUEUE 1
 
-#define MAX_SENT_DATA 20
+#define MAX_SENT_DATA 40
 #if MAX_SENT_DATA % 2 != 0
 # error "MAX_SENT_DATA" must have even value
 #endif

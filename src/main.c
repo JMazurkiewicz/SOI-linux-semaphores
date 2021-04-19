@@ -72,7 +72,7 @@ int main() {
                 break;
 
             case PROC_B:
-                //producer_routine(&data, &producer_b, "process-b");
+                producer_routine(&data, &producer_b, "process-b");
                 break;
 
             case PROC_C:

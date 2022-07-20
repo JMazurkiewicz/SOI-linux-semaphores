@@ -1,10 +1,33 @@
-# Semafory - SOI
+# Prezentacja semaforów w systemie Linux
 
 Autor: Jakub Mazurkiewicz
 
-Uzyskana ocena: 8/8
+## Pobieranie i kompilacja
 
-## Treść zadania
+```bash
+git clone https://github.com/JMazurkiewicz/SOI-linux-semaphores
+cd SOI-linux-semaphores
+cmake -B build
+cmake --build build
+```
+
+## Uruchamianie
+
+```bash
+cd build
+./semaphores 1>/dev/null & tail -f semaphores.log
+
+# Lub po prostu:
+./semaphores
+```
+
+## Dodatkowe informacje
+
+### Narzędzia
+
+* `freeshm.sh` - usuwanie semaforów i pamięci współdzielonej z katalogu `/dev/shm`.
+
+### Treść zadania
 
 Założenia:
 
@@ -16,20 +39,9 @@ Założenia:
 * Będzie dużo wydruków z programu
 * Nie można używać aktywnego oczekiwania
 
-## Kompilacja i uruchamianie
-
-```bash
-make
-./a.out
-```
-
-## Ocena
+### Ocena
 
 * Koncepcja (`docs/concept.pdf`): 2/2
 * Program: 6/6
 
 Łącznie: 8/8
-
-## Dodatkowe narzędzia
-
-* `freeshm.bash` - usuwanie semaforów i pamięci współdzielonej z katalogu `/dev/shm`
